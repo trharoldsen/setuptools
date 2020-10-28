@@ -443,7 +443,12 @@ class ConfigHandler:
         or more related sections.
 
         """
-        for section_name, section_options in self.sections.items():
+        sections = {
+            k: v for k, v in self.sections.items()
+            if k not in ['options.find', 'options.find_namespace']
+        }
+
+        for section_name, section_options in sections.items():
 
             method_postfix = ''
             if section_name:  # [section.option] variant
@@ -611,17 +616,19 @@ class ConfigOptionsHandler(ConfigHandler):
         findns = trimmed_value == find_directives[1]
 
         # Read function arguments from a dedicated section.
-        find_kwargs = self.parse_section_packages__find(
-            self.sections.get('packages.find', {}))
 
         if findns:
+            section = self.sections.get('packages.find_namespace', {})
             from setuptools import find_namespace_packages as find_packages
         else:
+            section = self.sections.get('packages.find', {})
             from setuptools import find_packages
+
+        find_kwargs = self._parse_section_packages__find(section)
 
         return find_packages(**find_kwargs)
 
-    def parse_section_packages__find(self, section_options):
+    def _parse_section_packages__find(self, section_options):
         """Parses `packages.find` configuration file section.
 
         To be used in conjunction with _parse_packages().

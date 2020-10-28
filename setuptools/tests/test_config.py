@@ -729,7 +729,7 @@ class TestOptions:
             '[options]\n'
             'packages = find_namespace:\n'
             '\n'
-            '[options.packages.find]\n'
+            '[options.packages.find_namespace]\n'
             'where = .\n'
             'include =\n'
             '    fake_package.sub_one\n'
@@ -742,7 +742,7 @@ class TestOptions:
             '[options]\n'
             'packages = find_namespace:\n'
             '\n'
-            '[options.packages.find]\n'
+            '[options.packages.find_namespace]\n'
             'exclude =\n'
             '    fake_package.sub_one\n'
         )
